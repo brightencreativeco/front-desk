@@ -186,15 +186,17 @@
   .mini:disabled { opacity: .35; cursor: default; }
   .hint { font-size: 12px; color: #6B6F62; margin-top: 6px; }
   .gear { top: 12px; left: 12px; }
+  /* screen-reader-only text: read aloud, never shown */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 </style>
 </head>
 <body>
-<button class="gear" id="gear" aria-label="Settings" title="Settings">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+<button class="gear" id="gear" aria-label="Settings" aria-controls="panel" aria-expanded="false" title="Settings">
+  <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
 </button>
-<div class="panel" id="panel" hidden>
+<div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panelTitle" hidden>
  <div class="panel-in">
-  <div class="ph"><span>Settings</span><button class="x" id="closePanel" aria-label="Close settings">×</button></div>
+  <div class="ph"><span id="panelTitle">Settings</span><button class="x" id="closePanel" aria-label="Close settings">×</button></div>
   <div class="sec">
     <p class="sl">Colors</p>
     <div class="seg" id="themeSeg">
@@ -208,7 +210,7 @@
   </div>
   <div class="sec">
     <p class="sl">Location</p>
-    <div class="crow"><input class="txt" id="cityInput" placeholder="Type your city" style="flex:1"><button class="mini" id="citySearch">Search</button></div>
+    <div class="crow"><input class="txt" id="cityInput" placeholder="Type your city" aria-label="Search for your city" style="flex:1"><button class="mini" id="citySearch">Search</button></div>
     <div id="cityResults"></div>
     <p class="hint" id="cityNow"></p>
   </div>
@@ -225,7 +227,9 @@
   <p class="saved credit"><a href="https://brightencreativeco.com" target="_blank" rel="noopener">Front Desk widgets · © 2026 Brighten Creative Co.</a></p>
  </div>
 </div>
-<div class="wx" id="wx">
+<main class="wx" id="wx">
+  <h1 class="sr-only">Weather</h1>
+  <p class="sr-only" id="live" role="status" aria-live="polite"></p>
   <section class="now">
     <div class="icon" id="icon" aria-hidden="true"></div>
     <div class="temp" id="temp">--°</div>
@@ -237,7 +241,7 @@
   </section>
   <section class="days" id="days"></section>
   <p class="status" id="status" hidden></p>
-</div>
+</main>
 
 <script>
 var SOFT = 0.78, LINE = 0.18, COLOR_KEY = "clockin-colors-weather";
@@ -284,9 +288,14 @@ function checkContrast() {
 
 /* --- panel wiring --- */
 var panel = document.getElementById("panel");
-document.getElementById("gear").onclick = function () { panel.hidden = false; syncPanel(); };
-document.getElementById("closePanel").onclick = function () { panel.hidden = true; };
-document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !panel.hidden) { panel.hidden = true; e.stopImmediatePropagation(); } });
+/* ---------- screen readers: announce changes and handle the settings panel ---------- */
+function announce(msg) { var l = document.getElementById("live"); l.textContent = ""; setTimeout(function () { l.textContent = msg; }, 50); }
+var gearBtn = document.getElementById("gear");
+function openPanel() { panel.hidden = false; syncPanel(); gearBtn.setAttribute("aria-expanded", "true"); document.getElementById("closePanel").focus(); }
+function closePanel() { if (panel.hidden) return; panel.hidden = true; gearBtn.setAttribute("aria-expanded", "false"); gearBtn.focus(); }
+gearBtn.onclick = openPanel;
+document.getElementById("closePanel").onclick = closePanel;
+document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !panel.hidden) { closePanel(); e.stopImmediatePropagation(); } });
 
 function segSelect(id, val) {
   document.querySelectorAll("#" + id + " button").forEach(function (b) { b.classList.toggle("on", b.dataset.v === val); });
@@ -455,7 +464,7 @@ function fetchWeather() {
       } else {
         $("status").textContent = "Can't reach the weather right now. Trying again soon.";
       }
-      $("status").hidden = false;
+      $("status").hidden = false; announce($("status").textContent);
     });
 }
 function gotWeather(model) {
