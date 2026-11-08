@@ -1,6 +1,6 @@
 Copyright (c) 2026 Brighten Creative Co. All rights reserved.
 
-The Front Desk widgets in this repository (prompts, timer, calculator,
+The Front Desk widgets (prompts, timer, calculator,
 world clock, weather, and design kit), including their code, design,
 and written content such as the prompts and affirmations, are owned by
 Brighten Creative Co.
