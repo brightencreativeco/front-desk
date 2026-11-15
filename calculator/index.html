@@ -101,23 +101,24 @@
     border-radius: 9px;
     cursor: pointer;
     min-height: 0;
-    /* RAISED style: a little ledge underneath */
-    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.28);
+    /* RAISED style: each key gets its own darker bottom edge and a soft top highlight,
+       so it reads as a button on any background (a dark shadow alone disappears on dark colors) */
+    box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 2px 3px rgba(0, 0, 0, 0.25);
     transition: transform .08s, box-shadow .08s, filter .15s, background-color .15s;
   }
   .key.op { background: color-mix(in srgb, var(--text) 72%, var(--bg)); font-size: clamp(16px, min(5.6vw, 5vh), 24px); }
   .key.wide { grid-column: span 2; }
   .key.pop1 { background: var(--pop1); color: var(--pop1-label); }
   .key.pop2 { background: var(--pop2); color: var(--pop2-label); font-size: clamp(16px, min(5.6vw, 5vh), 24px); }
-  .key:hover { transform: translateY(-1px); box-shadow: 0 4px 0 rgba(0, 0, 0, 0.28); filter: brightness(1.06); }
-  .key:active, .key.pressed { transform: translateY(3px); box-shadow: 0 0 0 rgba(0, 0, 0, 0.28); filter: brightness(.95); }
+  .key:hover { transform: translateY(-1px); filter: brightness(1.06); }
+  .key:active, .key.pressed { transform: translateY(2px); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.22), inset 0 2px 3px rgba(0, 0, 0, 0.18); filter: brightness(.95); }
   .key:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
   .key.op:hover { filter: brightness(1.1); }
 
   /* FLAT style (choose in the gear) */
   .flat .key { box-shadow: none; }
-  .flat .key:hover { transform: translateY(-1px); box-shadow: none; }
-  .flat .key:active, .flat .key.pressed { transform: scale(.96); }
+  .flat .key:hover { transform: none; box-shadow: none; filter: brightness(1.08); }
+  .flat .key:active, .flat .key.pressed { transform: scale(.96); box-shadow: none; }
 
   /* gear sits inside the display's left corner (Notion's menu covers the top-right) */
   /* ---------- SETTINGS (gear + panel) ----------
@@ -377,7 +378,8 @@ var copts = loadSet("clockin-calc", CALC_DEFAULT);
 /* Pick a dark or light label for a colored key, whichever is easier to read */
 function labelFor(hexColor) {
   var c = rgbOf(hexColor);
-  return ratio(c, [255, 255, 255]) >= ratio(c, [30, 30, 30]) ? "#FFFFFF" : "#1E1E1E";
+  // light pop colors get Spilled Sangria labels, dark ones get Existential Mist
+  return ratio(c, [255, 250, 248]) >= ratio(c, [78, 19, 35]) ? "#FFFAF8" : "#3D452F";
 }
 function applyCalcOpts() {
   var r = document.documentElement.style;
